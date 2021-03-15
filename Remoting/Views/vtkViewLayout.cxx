@@ -398,6 +398,16 @@ void vtkViewLayout::UpdateDisplay(vtkObject* sender, unsigned long, void*)
   vtkOpenGLRenderUtilities::MarkDebugEvent("vtkViewLayout::UpdateDisplayForTileDisplay Start");
   processWindow->GetState()->Initialize(processWindow);
   processWindow->Render();
+
+# ifdef WIN32
+  MSG msg;
+  while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+  {
+    TranslateMessage(&msg);
+    DispatchMessage(&msg);
+  }
+# endif
+
   vtkOpenGLRenderUtilities::MarkDebugEvent("vtkViewLayout::UpdateDisplayForTileDisplay End");
 
   // note, we don't restore active window to null here since we want it to be
